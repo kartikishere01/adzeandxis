@@ -40,6 +40,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${fontCormorant.variable} ${fontBarlow.variable} ${fontBarlowCondensed.variable} antialiased`}
     >
       <body>
