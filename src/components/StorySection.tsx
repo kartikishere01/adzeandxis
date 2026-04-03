@@ -79,10 +79,10 @@ export default function StorySection() {
     <section ref={sectionRef} id="story" className="story section">
       <div ref={bgLayerRef} className="bg-layer" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
         {/* Background image layer */}
-        <div ref={imageRef} className="story__image">
+        <div ref={imageRef} className="story__image" style={{ filter: "grayscale(100%)" }}>
           <img
-            src="/story-bg.png"
-            alt="Minimalist architectural interior"
+            src="/blog-1.png"
+            alt="Minimalist architectural light and shadow"
             draggable={false}
           />
         </div>

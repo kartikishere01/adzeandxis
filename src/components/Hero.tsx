@@ -15,6 +15,9 @@ export default function Hero() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Set initial state to strictly black and white
+      gsap.set(imageRef.current, { filter: "grayscale(100%)" });
+
       // Ken Burns — slow cinematic scale on the background image
       gsap.fromTo(
         imageRef.current,
@@ -64,6 +67,9 @@ export default function Hero() {
       // Fade the grid container in
       gridTl.to(gridRef.current, { opacity: 1, duration: 0.3, ease: "none" }, 0);
 
+      // Turn background colorful as user scrolls
+      gridTl.to(imageRef.current, { filter: "grayscale(0%)", duration: 1, ease: "none" }, 0);
+
       // Stagger horizontal lines drawing in
       hLines.forEach((line, i) => {
         gridTl.to(line, { scaleX: 1, ease: "power2.out", duration: 1 }, i * 0.08);
@@ -101,7 +107,7 @@ export default function Hero() {
     <section ref={sectionRef} id="hero" className="hero section">
       <div ref={bgLayerRef} className="bg-layer" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
         <div ref={imageRef} className="hero__image">
-          <img src="/hero-bg.png" alt="Modern luxury architecture" draggable={false} />
+          <img src="/hero-bw.png" alt="Black and white modern architecture" draggable={false} />
         </div>
       </div>
 

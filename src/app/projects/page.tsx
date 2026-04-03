@@ -1,13 +1,20 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { projects } from "@/lib/data";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 export default function ProjectsPage() {
   const containerRef = useRef<HTMLElement>(null);
+  const [galleryIndex, setGalleryIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setGalleryIndex((prev) => prev + 1);
+    }, 1500);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -81,43 +88,36 @@ export default function ProjectsPage() {
       {projects.map((project, idx) => (
         <section 
           key={project.slug} 
-          className="project-panel absolute inset-0 w-full h-[100dvh] flex flex-col justify-end overflow-hidden"
+          className="project-panel absolute inset-0 w-full h-[100dvh] flex flex-col md:flex-row items-center overflow-hidden bg-black"
           style={{ zIndex: idx }}
         >
-          {/* Background Image Container */}
-          <div className="absolute inset-0 z-0 bg-black">
-            <Image 
-              src={project.heroImage} 
-              alt={project.title}
-              fill
-              className="project-image object-cover grayscale opacity-80 origin-center"
-              sizes="100vw"
-              priority={idx === 0}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-90" />
-          </div>
-
-          {/* Foreground UI Overlay */}
-          <div className="relative z-10 project-overlay px-6 md:px-12 lg:px-24 pb-20 md:pb-32 w-full max-w-7xl mx-auto">
+          {/* Foreground UI Overlay (Left Column) */}
+          <div className="relative z-10 project-overlay px-6 md:px-12 lg:px-24 w-full md:w-[40%] flex-shrink-0 order-2 md:order-1">
             <Link 
               href={`/projects/${project.slug}`} 
               className="group flex flex-col gap-8 cursor-pointer outline-none w-full"
             >
-              <h2 className="project-title text-5xl md:text-8xl lg:text-[10rem] font-sans tracking-[-0.04em] uppercase leading-none text-white drop-shadow-2xl">
+              <h2 className="project-title text-5xl md:text-8xl lg:text-[8rem] font-sans tracking-[-0.04em] uppercase leading-none text-white drop-shadow-2xl">
                 {project.title}
               </h2>
               
               <div className="project-description flex flex-col gap-10">
-                <p className="text-lg md:text-2xl font-sans tracking-wide text-white/80 leading-relaxed max-w-2xl drop-shadow-md">
-                  {project.description}
-                </p>
-                
                 <div className="flex items-center gap-6 text-xs md:text-sm font-mono uppercase tracking-[0.3em] opacity-50 group-hover:opacity-100 transition-opacity duration-500">
                   <span className="w-12 h-[1px] bg-white/50 group-hover:bg-white inline-block transition-colors duration-500 origin-left scale-x-75 group-hover:scale-x-100" />
                   View Case Study
                 </div>
               </div>
             </Link>
+          </div>
+
+          {/* Image Container (Right Column) */}
+          <div className="relative z-0 w-full md:w-[60%] h-[60vh] md:h-[85vh] flex items-center justify-center pr-6 md:pr-12 lg:pr-24 order-1 md:order-2">
+            <img 
+              src={project.gallery[galleryIndex % project.gallery.length]} 
+              alt={project.title}
+              className="project-image aspect-[4/5] object-cover h-full w-auto opacity-80 origin-center filter-none shadow-2xl"
+              draggable={false}
+            />
           </div>
         </section>
       ))}

@@ -2,21 +2,22 @@
 
 import { useState, useRef, useEffect } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-
-const projects = [
-  { id: 1, title: "The Glass Pavilion", image: "/project_01.png" },
-  { id: 2, title: "Skyward Residence", image: "/project_02.png" },
-  { id: 3, title: "Zen Retreat", image: "/project_03.png" },
-  { id: 4, title: "Brutalist Museum", image: "/project_04.png" },
-  { id: 5, title: "Light Chapel", image: "/project_05.png" },
-  { id: 6, title: "Vaulted Cellars", image: "/project_06.png" },
-];
+import { projects } from "@/lib/data";
 
 export default function HoverProjectsSection() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [galleryIndex, setGalleryIndex] = useState(0);
   const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
+
+  // Cycle through the gallery image index automatically
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setGalleryIndex((prev) => prev + 1);
+    }, 1500); // 1.5 seconds per slide
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     // Initial setup: ensure only the first image is visible
@@ -75,6 +76,7 @@ export default function HoverProjectsSection() {
     }
 
     setActiveIndex(index);
+    setGalleryIndex(0); // reset slideshow for new project
   };
 
   // Optional: subtle parallax effect on mouse move over the right column
@@ -113,7 +115,7 @@ export default function HoverProjectsSection() {
       <div className="hover-projects__list">
         {projects.map((project, index) => (
           <h2
-            key={project.id}
+            key={project.slug}
             className={`hover-projects__item ${
               index === activeIndex ? "hover-projects__item--active" : ""
             }`}
@@ -133,11 +135,11 @@ export default function HoverProjectsSection() {
       >
         {projects.map((project, index) => (
           <img
-            key={project.id}
+            key={project.slug}
             ref={(el) => {
               imagesRef.current[index] = el;
             }}
-            src={project.image}
+            src={project.gallery[galleryIndex % project.gallery.length]}
             alt={project.title}
             className="hover-projects__image"
             draggable={false}
