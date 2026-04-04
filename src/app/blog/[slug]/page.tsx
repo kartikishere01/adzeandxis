@@ -22,10 +22,10 @@ export default async function BlogPostPage({
   }
 
   return (
-    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] pt-48 pb-32 px-6 md:px-12 selection:bg-[var(--accent)] selection:text-[var(--charcoal)]">
+    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] pt-48 pb-32 px-[5%] md:px-[8%] selection:bg-[var(--accent)] selection:text-[var(--charcoal)]">
       
       {/* Return Navigation */}
-      <nav className="max-w-4xl mx-auto mb-20 animate-fade-in opacity-0" style={{ animation: "fadeIn 1s forwards" }}>
+      <nav className="max-w-4xl mx-auto mb-20 animate-fade-in opacity-0" style={{ animation: "fadeIn 1s forwards", paddingTop: '90px' }}>
         <Link 
           href="/blog" 
           className="uppercase tracking-[0.25em] font-condensed text-[var(--muted)] text-xs md:text-sm hover:text-[var(--accent)] transition-colors duration-300"

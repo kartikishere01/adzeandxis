@@ -30,7 +30,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       */}
       <ProjectDetailClient>
         {/* 1. HERO SECTION */}
-        <section className="relative h-screen w-full overflow-hidden flex flex-col justify-end pt-32 pb-12 px-6 md:px-12 lg:px-24">
+        <section className="relative h-screen w-full overflow-hidden flex flex-col justify-end pt-[90px] pb-12 px-6 md:px-12 lg:px-24">
           <div className="absolute inset-0 z-0 bg-black">
              <Image 
                 src={project.heroImage} 
@@ -65,14 +65,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </section>
 
         {/* 2. INTRO STATEMENT */}
-        <section className="min-h-[70vh] flex items-center justify-center px-6 md:px-12 py-32 text-center">
+        <section className="min-h-[70vh] flex items-center justify-center px-[5%] md:px-[8%] py-32 text-center">
           <h2 className="intro-text text-3xl md:text-5xl lg:text-7xl font-sans tracking-[-0.02em] leading-tight max-w-5xl mx-auto uppercase">
             {project.description}
           </h2>
         </section>
 
         {/* 3. SPLIT SECTION */}
-        <section className="px-6 md:px-12 lg:px-24 py-32 flex flex-col lg:flex-row gap-16 lg:gap-32 items-center">
+        <section className="px-[5%] md:px-[8%] py-32 flex flex-col lg:flex-row gap-16 lg:gap-32 items-center">
           <div className="split-text lg:w-1/3 flex flex-col gap-8">
             <h3 className="font-mono text-sm uppercase tracking-[0.3em] opacity-50">Concept</h3>
             <p className="text-lg md:text-xl font-sans leading-relaxed tracking-wide opacity-80">

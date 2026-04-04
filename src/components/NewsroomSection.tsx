@@ -72,7 +72,7 @@ export default function NewsroomSection() {
   return (
     <section 
       ref={sectionRef} 
-      className="relative w-full py-32 md:py-48 px-6 md:px-12 xl:px-24 bg-[var(--background)] text-[var(--foreground)]"
+      className="relative w-full py-32 md:py-48 px-[5%] md:px-[8%] bg-[var(--background)] text-[var(--foreground)]"
     >
       <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 relative">
         
@@ -137,6 +137,7 @@ export default function NewsroomSection() {
                       src={article.image} 
                       alt={article.title} 
                       className="absolute inset-0 w-full h-full object-cover filter grayscale-[0.8] opacity-80 scale-100 transition-all duration-[1.5s] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.03] group-hover:grayscale-0 group-hover:opacity-100" 
+                      loading="lazy"
                     />
                   </div>
                   <div className="flex flex-col gap-4 border-t border-[rgba(255,255,255,0.05)] pt-4">

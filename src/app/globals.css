@@ -65,6 +65,25 @@ body {
   overflow-x: hidden;
 }
 
+/* ── Interactive Elements ── */
+a, button {
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+a:hover, button:hover {
+  opacity: 0.7;
+}
+
+a:active, button:active {
+  transform: scale(0.98);
+}
+
 ::selection {
   background: var(--foreground);
   color: var(--background);
@@ -92,6 +111,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Isolate stacking context — prevents hero layers from bleeding over next section */
+  isolation: isolate;
+  /* Promote to own GPU layer for smooth compositing */
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .hero__image {
@@ -213,6 +238,12 @@ body {
   50% { opacity: 1; transform: scaleY(1.15); }
 }
 
+/* Ambient glow behind Hero title — breathes slowly */
+@keyframes heroPulse {
+  0%   { opacity: 0.6; transform: scale(1); }
+  100% { opacity: 1;   transform: scale(1.12); }
+}
+
 /* ── Story Section ─────────────────────────────── */
 .story {
   position: relative;
@@ -223,6 +254,11 @@ body {
   align-items: center;
   justify-content: center;
   background: var(--background);
+  /* Isolate stacking context from Hero above */
+  isolation: isolate;
+  /* Promoted layer prevents flicker on scroll entry */
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .story__image {
@@ -245,7 +281,7 @@ body {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.45);
   pointer-events: none;
 }
 
@@ -256,9 +292,15 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
-  padding: 0 2rem;
+  padding: 0 5%;
   max-width: 64rem;
   text-align: center;
+}
+
+@media (min-width: 768px) {
+  .story__content {
+    padding: 0 8%;
+  }
 }
 
 .story__line {
@@ -304,9 +346,15 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 4rem;
+  padding: 4rem 5%;
   gap: 2rem;
   z-index: 2;
+}
+
+@media (min-width: 768px) {
+  .hover-projects__list {
+    padding: 4rem 8%;
+  }
 }
 
 .hover-projects__item {
@@ -348,9 +396,14 @@ body {
   height: 100%;
   object-fit: cover;
   will-change: transform, opacity;
-  /* Start hidden by default, JS handles initial state */
+  /* Start hidden — GSAP sets first one visible on mount */
   opacity: 0;
   pointer-events: none;
+}
+
+/* First image is visible by default as a CSS fallback */
+.hover-projects__image:first-child {
+  opacity: 1;
 }
 
 /* ── All Works Section ─────────────────────────── */
@@ -491,7 +544,13 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 10rem 2rem 6rem;
+  padding: 10rem 5% 6rem;
+}
+
+@media (min-width: 768px) {
+  .contact-section {
+    padding: 10rem 8% 6rem;
+  }
 }
 
 /* Subtle SVG noise grain overlay */
@@ -760,8 +819,14 @@ body {
   min-height: 100vh;
   display: flex;
   align-items: flex-end;
-  padding: 0 2rem 8rem;
+  padding: 90px 5% 8rem;
   overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .contact-page__hero {
+    padding: 90px 8% 8rem;
+  }
 }
 
 .contact-page__hero-inner {
@@ -797,6 +862,10 @@ body {
   font-style: italic;
   font-weight: 200;
   color: var(--muted);
+}
+
+.top-strip {
+  transition: opacity 0.4s ease;
 }
 
 .contact-page__subtext {

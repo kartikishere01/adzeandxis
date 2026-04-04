@@ -31,8 +31,9 @@ export function initLenis(): Lenis {
   lenisInstance.on("scroll", ScrollTrigger.update);
 
   // ── Unified RAF: drive Lenis from GSAP's ticker for frame-perfect sync ──
-  gsap.ticker.add((time: number) => {
-    lenisInstance?.raf(time * 1000); // GSAP ticker is in seconds, Lenis wants ms
+  // We use GSAP's ticker.time (seconds) converted to milliseconds.
+  gsap.ticker.add(() => {
+    lenisInstance?.raf(gsap.ticker.time * 1000);
   });
 
   // Disable GSAP's default lagSmoothing so it doesn't fight Lenis

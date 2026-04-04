@@ -31,10 +31,10 @@ export default function BlogLandingPage() {
   return (
     <main 
       ref={containerRef} 
-      className="min-h-screen bg-[var(--background)] text-[var(--foreground)] pt-40 pb-48 px-6 md:px-12 xl:px-24"
+      className="min-h-screen bg-[var(--background)] text-[var(--foreground)] pt-40 pb-48 px-[5%] md:px-[8%]"
     >
       {/* ── HEADER ── */}
-      <header className="max-w-[1600px] mx-auto mb-32 md:mb-48 border-b border-[rgba(255,255,255,0.05)] pb-12 md:pb-24">
+      <header className="max-w-[1600px] mx-auto mb-32 md:mb-48 border-b border-[rgba(255,255,255,0.05)] pb-12 md:pb-24" style={{ paddingTop: '90px' }}>
         <h1 className="fade-up opacity-0 font-serif text-6xl md:text-8xl lg:text-[10.5rem] tracking-tight leading-none mb-8 text-[var(--foreground)]">
           Newsroom
         </h1>

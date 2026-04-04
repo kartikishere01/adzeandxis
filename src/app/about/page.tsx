@@ -95,10 +95,10 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <main ref={pageRef} className="w-full min-h-screen bg-[var(--background)] text-[var(--foreground)] pt-40 pb-32 selection:bg-[var(--accent)] selection:text-[var(--background)]">
+    <main ref={pageRef} className="w-full min-h-screen px-[5%] md:px-[8%] bg-[var(--background)] text-[var(--foreground)] pt-40 pb-32 selection:bg-[var(--accent)] selection:text-[var(--background)]">
       
       {/* ── HEADER INTRO ── */}
-      <section className="px-6 md:px-12 xl:px-24 min-h-[85vh] flex flex-col justify-center max-w-[1600px] mx-auto pb-48 text-center items-center">
+      <section className="min-h-[85vh] flex flex-col justify-center max-w-[1600px] mx-auto pb-48 text-center items-center" style={{ paddingTop: '90px' }}>
         <div className="w-full flex flex-col items-center text-center">
           <span className="fade-up-intro block font-condensed uppercase tracking-[0.3em] text-[10px] md:text-sm text-[var(--muted)] opacity-50 mb-10 border-b border-[rgba(255,255,255,0.05)] pb-4 w-max mx-auto">
             About Page &mdash; Who We Are
@@ -110,7 +110,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── STUDIO STORY (SPLIT SCREEN) ── */}
-      <section className="story-container px-6 md:px-12 xl:px-24 max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-32 mb-56">
+      <section className="story-container max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-32 mb-56">
         
         {/* Left: Sticky Quote */}
         <div className="lg:col-span-6 relative">
@@ -148,7 +148,7 @@ export default function AboutPage() {
 
       {/* ── SERVICES (WHAT WE OFFER) ── */}
       {/* Refactored from 4-cols to a massive 2x2 grid for ultimate breathing room */}
-      <section className="services-container px-6 md:px-12 xl:px-24 max-w-[1600px] mx-auto mb-64 pt-32 border-t border-[rgba(255,255,255,0.03)]">
+      <section className="services-container max-w-[1600px] mx-auto mb-64 pt-32 border-t border-[rgba(255,255,255,0.03)]">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-32">
            <div>
              <span className="block font-condensed uppercase tracking-[0.3em] text-[10px] md:text-xs text-[var(--muted)] opacity-50 mb-6">
@@ -196,7 +196,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── SIX REASONS INTRO SLIDE ── */}
-      <section className="six-reasons-intro-section w-full min-h-[90vh] flex flex-col justify-center items-center px-6 text-center border-t border-[rgba(255,255,255,0.03)] pt-12">
+      <section className="six-reasons-intro-section w-full min-h-[90vh] flex flex-col justify-center items-center text-center border-t border-[rgba(255,255,255,0.03)] pt-12">
         <div className="flex flex-col items-center gap-8">
            <span className="fade-up-reason-intro font-condensed uppercase tracking-[0.3em] text-[10px] md:text-sm text-[var(--accent)] opacity-80">
              04 — What We Do &amp; Why We're Different
@@ -208,7 +208,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── SIX REASONS DETAILS ── */}
-      <section className="px-6 md:px-12 xl:px-24 max-w-[1200px] mx-auto mb-48 flex flex-col gap-64 relative">
+      <section className="max-w-[1200px] mx-auto mb-48 flex flex-col gap-64 relative">
         <div className="flex flex-col w-full gap-56 md:gap-72 pb-32">
           {[
             {
@@ -274,7 +274,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── FOUNDER LINE ── */}
-      <section className="mt-64 pt-64 pb-48 px-6 text-center flex flex-col items-center justify-center relative overflow-hidden">
+      <section className="mt-64 pt-64 pb-48 text-center flex flex-col items-center justify-center relative overflow-hidden">
         <span className="font-condensed uppercase tracking-[0.3em] text-[10px] md:text-xs text-[var(--muted)] opacity-50 mb-16 border-b border-[rgba(255,255,255,0.05)] pb-6">
           Founder Line
         </span>

@@ -32,14 +32,15 @@ export default function AboutPreviewSection() {
   return (
     <section 
       ref={sectionRef} 
-      className="w-full min-h-[90vh] flex flex-col items-center justify-center text-center px-6 md:px-12 py-32 bg-[var(--background)] text-[var(--foreground)] border-t border-[rgba(255,255,255,0.03)]"
+      className="w-full min-h-[90vh] flex flex-col items-center justify-center text-center px-[5vw] lg:px-[10vw] py-32 bg-[var(--background)] text-[var(--foreground)] border-t border-[rgba(255,255,255,0.03)]"
     >
-      <div className="flex flex-col items-center gap-8 max-w-5xl mx-auto">
+      {/* Responsive Container Capped at 1400px */}
+      <div className="flex flex-col items-center justify-center gap-8 w-full max-w-[1400px] mx-auto">
         <span className="preview-fade-up font-condensed uppercase tracking-[0.3em] text-[10px] md:text-xs text-[var(--accent)] opacity-80 mb-8 border-b border-[rgba(255,255,255,0.05)] pb-4 px-4">
           03 &mdash; The Studio
         </span>
         
-        <h2 className="preview-fade-up font-serif text-4xl md:text-5xl lg:text-[4.5rem] tracking-tight leading-[1.15] text-[var(--foreground)] opacity-95">
+        <h2 className="preview-fade-up font-serif text-[clamp(2.5rem,5vw,5.5rem)] tracking-tight leading-[1.15] text-[var(--foreground)] opacity-95">
           "Architecture, interior design, and construction should <span className="italic text-[var(--muted)] opacity-70">never be separated.</span>"
         </h2>
         

@@ -66,7 +66,7 @@ export default function AwardsSection() {
          </span>
       </div>
 
-      <div className="flex h-full items-center justify-center w-full px-6 md:px-24">
+      <div className="flex h-full items-center justify-center w-full px-[5%] md:px-[8%]">
         <div className="w-full flex flex-col justify-center items-center relative group pt-24 pb-12">
           {/* Background Year */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-serif text-[12rem] md:text-[20rem] lg:text-[30rem] font-light text-[var(--foreground)] opacity-[0.03] leading-none pointer-events-none tracking-tighter mix-blend-overlay">
@@ -95,6 +95,7 @@ export default function AwardsSection() {
                    alt={award.project} 
                    className="slideshow-img absolute inset-0 w-full h-full object-cover origin-center transition-transform duration-700 ease-out group-hover:scale-105" 
                    draggable={false} 
+                   loading="lazy"
                  />
                ))}
              </div>

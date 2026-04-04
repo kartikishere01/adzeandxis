@@ -1,157 +1,127 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import Link from "next/link";
 import { gsap } from "@/lib/gsap";
+import { useGSAP } from "@gsap/react";
 import { projects } from "@/lib/data";
 
-// Map each project to a positioned image slot — 2 slots per project for variety
-const imageSlots = [
-  // Project 0 — residence-01
-  { projectIndex: 0, cls: "aw-img aw-img--1" },
-  { projectIndex: 0, cls: "aw-img aw-img--2" },
-  // Project 1 — the-brutal-pavilion
-  { projectIndex: 1, cls: "aw-img aw-img--3" },
-  { projectIndex: 1, cls: "aw-img aw-img--4" },
-  // Project 2 — alpine-retreat
-  { projectIndex: 2, cls: "aw-img aw-img--5" },
-  { projectIndex: 2, cls: "aw-img aw-img--6" },
-  // Project 3 — gallery-minimal
-  { projectIndex: 3, cls: "aw-img aw-img--7" },
-  { projectIndex: 3, cls: "aw-img aw-img--8" },
+// An organically scattered arrangement spread across a very tall scrolling container.
+// Heights and speeds vary considerably to allow intentional, cinematic overlapping during scroll.
+const LAYOUT = [
+  { top: "10vh", left: "4vw", width: "24vw", speed: 0.3 },
+  { top: "80vh", left: "70vw", width: "16vw", speed: 0.1 },
+  { top: "140vh", left: "32vw", width: "14vw", speed: 0.6 },
+  { top: "180vh", left: "80vw", width: "15vw", speed: -0.15 }, // Slower, creating deep parallax
+  { top: "240vh", left: "8vw", width: "22vw", speed: 0.4 },
+  { top: "290vh", left: "55vw", width: "20vw", speed: 0.2 },
+  { top: "350vh", left: "25vw", width: "15vw", speed: -0.1 },
+  { top: "400vh", left: "82vw", width: "12vw", speed: 0.5 },
+  { top: "450vh", left: "45vw", width: "17vw", speed: 0.3 },
+  { top: "510vh", left: "10vw", width: "26vw", speed: 0.1 },
+  { top: "560vh", left: "68vw", width: "18vw", speed: 0.55 },
 ];
 
 export default function AllWorksSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const textRef = useRef<HTMLHeadingElement>(null);
-  const bgLayerRef = useRef<HTMLDivElement>(null);
-  const layer1Ref = useRef<HTMLDivElement>(null);
-  const layer2Ref = useRef<HTMLDivElement>(null);
-  const layer3Ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: "+=250%",
-          scrub: 1.5,
-          pin: true,
-          anticipatePin: 1,
-        },
-      });
+  // Flatten all gallery images from all projects 
+  const floatingItems = projects.flatMap(p => 
+    p.gallery.map(img => ({ img, slug: p.slug, title: p.title }))
+  );
 
-      tl.fromTo(layer1Ref.current, { y: "10%" }, { y: "-10%", ease: "none", force3D: true }, 0);
-      tl.fromTo(layer2Ref.current, { y: "25%" }, { y: "-25%", ease: "none", force3D: true }, 0);
-      tl.fromTo(layer3Ref.current, { y: "45%" }, { y: "-45%", ease: "none", force3D: true }, 0);
-      tl.fromTo(textRef.current, { scale: 0.95, opacity: 0.8 }, { scale: 1.05, opacity: 1, ease: "none", force3D: true }, 0);
+  useGSAP(() => {
+    const images = gsap.utils.toArray<HTMLElement>('.aw-parallax-img');
 
-      // Cinematic exit
-      gsap.to(bgLayerRef.current, {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "bottom 80%",
-          end: "bottom 20%",
-          scrub: true,
-        },
-        scale: 0.97,
-        opacity: 0.3,
-        ease: "none",
-        force3D: true,
-      });
+    images.forEach((img) => {
+      const speed = parseFloat(img.dataset.speed || "0");
+      
+      // 1. Reveal Animation: Fade in and scale up natively as they enter the bottom of the viewport
+      gsap.fromTo(img, 
+        { opacity: 0, scale: 0.95 },
+        {
+          opacity: 1, 
+          scale: 1,
+          duration: 1.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: img,
+            start: "top 90%", // Trigger when top of image hits 90% down the viewport
+            toggleActions: "play none none reverse",
+          }
+        }
+      );
 
-    }, sectionRef);
+      // 2. Variable Parallax Animation: Add an extra Y translation scrubbed by scroll
+      if (speed !== 0) {
+        gsap.to(img, {
+          y: () => -window.innerHeight * speed, 
+          ease: "none",
+          scrollTrigger: {
+            trigger: img,
+            start: "top bottom",
+            end: "bottom top", 
+            scrub: true,
+          }
+        });
+      }
+    });
 
-    return () => ctx.revert();
-  }, []);
-
-  // Split 8 slots across 3 parallax layers
-  const layer1Slots = imageSlots.slice(0, 3);
-  const layer2Slots = imageSlots.slice(3, 6);
-  const layer3Slots = imageSlots.slice(6, 8);
+  }, { scope: sectionRef });
 
   return (
-    <section ref={sectionRef} id="all-works" className="all-works section">
-      <div ref={bgLayerRef} className="bg-layer" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
-        <div className="all-works__parallax-container">
-
-          {/* Layer 1 (Back) */}
-          <div ref={layer1Ref} className="all-works__layer">
-            {layer1Slots.map((slot, i) => {
-              const project = projects[slot.projectIndex];
-              return (
-                <Link
-                  key={i}
-                  href={`/projects/${project.slug}`}
-                  className={`${slot.cls} aw-link`}
-                  title={project.title}
-                >
-                  <img
-                    src={project.heroImage}
-                    alt={project.title}
-                    draggable={false}
-                    className="aw-link__img"
-                  />
-                  <span className="aw-link__label">{project.title}</span>
-                </Link>
-              );
-            })}
-          </div>
-
-          {/* Layer 2 (Middle) */}
-          <div ref={layer2Ref} className="all-works__layer">
-            {layer2Slots.map((slot, i) => {
-              const project = projects[slot.projectIndex];
-              return (
-                <Link
-                  key={i}
-                  href={`/projects/${project.slug}`}
-                  className={`${slot.cls} aw-link`}
-                  title={project.title}
-                >
-                  <img
-                    src={project.heroImage}
-                    alt={project.title}
-                    draggable={false}
-                    className="aw-link__img"
-                  />
-                  <span className="aw-link__label">{project.title}</span>
-                </Link>
-              );
-            })}
-          </div>
-
-          {/* Layer 3 (Front) */}
-          <div ref={layer3Ref} className="all-works__layer">
-            {layer3Slots.map((slot, i) => {
-              const project = projects[slot.projectIndex];
-              return (
-                <Link
-                  key={i}
-                  href={`/projects/${project.slug}`}
-                  className={`${slot.cls} aw-link`}
-                  title={project.title}
-                >
-                  <img
-                    src={project.heroImage}
-                    alt={project.title}
-                    draggable={false}
-                    className="aw-link__img"
-                  />
-                  <span className="aw-link__label">{project.title}</span>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
+    <section 
+      ref={sectionRef} 
+      id="all-works" 
+      // Made section explicitly tall (approx 650vh to house the 560vh+ items) to allow native native fluid scrolling
+      className="relative w-full bg-[var(--background)] text-[var(--foreground)]"
+      style={{ height: '700vh' }} 
+    >
+      
+      {/* 
+        Sticky Header Container 
+        Remains firmly planted in the center of the viewport for duration of the section.
+      */}
+      <div className="sticky top-0 w-full h-screen flex items-center justify-center pointer-events-none z-30">
+        <h2 
+          className="font-sans font-bold text-[clamp(4rem,10vw,12rem)] tracking-tight flex items-start leading-none uppercase text-shadow-xl drop-shadow-2xl"
+          style={{ textShadow: "0 10px 40px rgba(0,0,0,0.8)" }}
+        >
+          All Work 
+        </h2>
       </div>
 
-      <div className="content-layer" style={{ position: 'relative', width: '100%', height: '100%', zIndex: 2, pointerEvents: 'none' }}>
-        <div className="all-works__overlay" />
-        <div className="all-works__content" style={{ pointerEvents: 'auto' }}>
-          <h2 ref={textRef} className="all-works__title">ALL WORKS</h2>
-        </div>
+      {/* 
+        Asymmetrical Scattered Grid Canvas
+        Items are placed manually across the massive 700vh canvas. 
+      */}
+      <div className="absolute top-0 left-0 w-full h-full z-20 pointer-events-none overflow-hidden">
+        {floatingItems.map((item, i) => {
+          // Wrap layout access safely if gallery expands
+          const layout = LAYOUT[i % LAYOUT.length];
+          
+          return (
+            <div 
+              key={`${item.slug}-${item.img}-${i}`} 
+              className="aw-parallax-img absolute pointer-events-auto cursor-pointer"
+              data-speed={layout.speed}
+              style={{
+                top: layout.top,
+                left: layout.left,
+                width: layout.width,
+              }}
+            >
+              <Link href={`/projects/${item.slug}`} className="block">
+                <img 
+                  src={item.img} 
+                  alt={item.title} 
+                  className="w-full h-auto object-cover opacity-90 transition-all hover:scale-105 hover:opacity-100 duration-500 shadow-2xl" 
+                  loading="lazy"
+                />
+              </Link>
+            </div>
+          );
+        })}
       </div>
     </section>
   );

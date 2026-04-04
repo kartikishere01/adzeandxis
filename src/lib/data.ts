@@ -32,7 +32,7 @@ export const projects: Project[] = [
   },
   {
     slug: "adze-axis-interior",
-    title: "ADZE & AXIS RESIDENCE",
+    title: "RESIDENCE",
     description: "A sophisticated narrative of luxury living, intertwining warm wood veneers, classic marble, and curated statement lighting.",
     conceptText: "This high-end interior residential project redefines contemporary luxury. The design language marries rich, dark timber paneling with the cool elegance of natural stone and marble. Bespoke elements, such as the jewel-toned velvet bar seating and custom crystal chandeliers, create distinct focal points within the open-plan layout. Every texture, from the plush textiles in the master suite to the reflective surfaces in the dining area, has been meticulously selected to foster an atmosphere of refined comfort and cinematic grandeur.",
     heroImage: "/projects/adze-axis-interior/iamge-2.PNG",
@@ -50,7 +50,7 @@ export const projects: Project[] = [
   },
   {
     slug: "adze-axis-cafe",
-    title: "ADZE & AXIS CAFE",
+    title: "CAFE",
     description: "An organic, arched interior space marrying botanical elements with fluted textures and warm, ambient illumination.",
     conceptText: "Envisioned as an urban oasis, the Adze & Axis Cafe weaves nature directly into the architecture. Continuous ceiling arches soften the spatial boundaries, while hanging botanical installations bring life and a profound sense of calm to the interior. The material palette relies heavily on raw, tactile finishes—plastered walls, fluted timber counters, and woven rattan seating. The soft, diffuse lighting emphasizes the organic curves of the space, creating an environment that feels both sophisticated and inherently grounded.",
     heroImage: "/projects/Interior/image-2.jpg",

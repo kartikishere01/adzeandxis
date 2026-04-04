@@ -4,6 +4,7 @@ import SmoothScroller from "@/components/SmoothScroller";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import BackToTop from "@/components/BackToTop";
 import "./globals.css";
 
 const fontCormorant = Cormorant_Garamond({
@@ -49,6 +50,7 @@ export default function RootLayout({
         {children}
         <Footer />
         <FloatingWhatsApp />
+        <BackToTop />
       </body>
     </html>
   );
