@@ -1,127 +1,143 @@
 "use client";
 
-import { useRef } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { projects } from "@/lib/data";
 import { gsap } from "@/lib/gsap";
 import { useGSAP } from "@gsap/react";
-import { projects } from "@/lib/data";
-
-// An organically scattered arrangement spread across a very tall scrolling container.
-// Heights and speeds vary considerably to allow intentional, cinematic overlapping during scroll.
-const LAYOUT = [
-  { top: "10vh", left: "4vw", width: "24vw", speed: 0.3 },
-  { top: "80vh", left: "70vw", width: "16vw", speed: 0.1 },
-  { top: "140vh", left: "32vw", width: "14vw", speed: 0.6 },
-  { top: "180vh", left: "80vw", width: "15vw", speed: -0.15 }, // Slower, creating deep parallax
-  { top: "240vh", left: "8vw", width: "22vw", speed: 0.4 },
-  { top: "290vh", left: "55vw", width: "20vw", speed: 0.2 },
-  { top: "350vh", left: "25vw", width: "15vw", speed: -0.1 },
-  { top: "400vh", left: "82vw", width: "12vw", speed: 0.5 },
-  { top: "450vh", left: "45vw", width: "17vw", speed: 0.3 },
-  { top: "510vh", left: "10vw", width: "26vw", speed: 0.1 },
-  { top: "560vh", left: "68vw", width: "18vw", speed: 0.55 },
-];
 
 export default function AllWorksSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  // Flatten all gallery images from all projects 
-  const floatingItems = projects.flatMap(p => 
-    p.gallery.map(img => ({ img, slug: p.slug, title: p.title }))
-  );
+  const containerRef = useRef<HTMLElement>(null);
+  const [activeSlug, setActiveSlug] = useState(projects[0].slug);
+  const [imgIndexes, setImgIndexes] = useState<Record<string, number>>({});
 
   useGSAP(() => {
-    const images = gsap.utils.toArray<HTMLElement>('.aw-parallax-img');
-
-    images.forEach((img) => {
-      const speed = parseFloat(img.dataset.speed || "0");
-      
-      // 1. Reveal Animation: Fade in and scale up natively as they enter the bottom of the viewport
-      gsap.fromTo(img, 
-        { opacity: 0, scale: 0.95 },
-        {
-          opacity: 1, 
-          scale: 1,
-          duration: 1.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: img,
-            start: "top 90%", // Trigger when top of image hits 90% down the viewport
-            toggleActions: "play none none reverse",
-          }
-        }
-      );
-
-      // 2. Variable Parallax Animation: Add an extra Y translation scrubbed by scroll
-      if (speed !== 0) {
-        gsap.to(img, {
-          y: () => -window.innerHeight * speed, 
-          ease: "none",
-          scrollTrigger: {
-            trigger: img,
-            start: "top bottom",
-            end: "bottom top", 
-            scrub: true,
-          }
-        });
+    // A subtle pin effect that momentarily holds the view as the section arrives
+    gsap.to(containerRef.current, {
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top top",
+        end: "+=35%", // Brief pause
+        pin: true,
+        anticipatePin: 1,
       }
     });
+  }, { scope: containerRef });
 
-  }, { scope: sectionRef });
+  const activeProject = projects.find(p => p.slug === activeSlug) || projects[0];
+  const currentIndex = imgIndexes[activeSlug] || 0;
+
+  const nextImg = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setImgIndexes(prev => ({
+      ...prev,
+      [activeSlug]: (currentIndex + 1) % activeProject.gallery.length
+    }));
+  };
+
+  const prevImg = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setImgIndexes(prev => ({
+      ...prev,
+      [activeSlug]: (currentIndex - 1 + activeProject.gallery.length) % activeProject.gallery.length
+    }));
+  };
 
   return (
     <section 
-      ref={sectionRef} 
+      ref={containerRef}
       id="all-works" 
-      // Made section explicitly tall (approx 650vh to house the 560vh+ items) to allow native native fluid scrolling
-      className="relative w-full bg-[var(--background)] text-[var(--foreground)]"
-      style={{ height: '700vh' }} 
+      className="w-full bg-[var(--background)] text-[var(--foreground)] py-32 md:py-48 px-[5%] md:px-[8%] min-h-screen relative z-10"
     >
-      
-      {/* 
-        Sticky Header Container 
-        Remains firmly planted in the center of the viewport for duration of the section.
-      */}
-      <div className="sticky top-0 w-full h-screen flex items-center justify-center pointer-events-none z-30">
-        <h2 
-          className="font-sans font-bold text-[clamp(4rem,10vw,12rem)] tracking-tight flex items-start leading-none uppercase text-shadow-xl drop-shadow-2xl"
-          style={{ textShadow: "0 10px 40px rgba(0,0,0,0.8)" }}
-        >
-          All Work 
+      <div className="max-w-[1600px] mx-auto">
+        
+        <h2 className="font-condensed uppercase tracking-[0.3em] text-[10px] md:text-xs text-[var(--foreground)] opacity-50 mb-16 border-b border-[rgba(255,255,255,0.05)] pb-6 relative z-20">
+          All Works &mdash; Index
         </h2>
-      </div>
 
-      {/* 
-        Asymmetrical Scattered Grid Canvas
-        Items are placed manually across the massive 700vh canvas. 
-      */}
-      <div className="absolute top-0 left-0 w-full h-full z-20 pointer-events-none overflow-hidden">
-        {floatingItems.map((item, i) => {
-          // Wrap layout access safely if gallery expands
-          const layout = LAYOUT[i % LAYOUT.length];
+        <div className="flex flex-col-reverse lg:grid lg:grid-cols-12 gap-16 lg:gap-24 relative z-20 items-start">
           
-          return (
-            <div 
-              key={`${item.slug}-${item.img}-${i}`} 
-              className="aw-parallax-img absolute pointer-events-auto cursor-pointer"
-              data-speed={layout.speed}
-              style={{
-                top: layout.top,
-                left: layout.left,
-                width: layout.width,
-              }}
-            >
-              <Link href={`/projects/${item.slug}`} className="block">
-                <img 
-                  src={item.img} 
-                  alt={item.title} 
-                  className="w-full h-auto object-cover opacity-90 transition-all hover:scale-105 hover:opacity-100 duration-500 shadow-2xl" 
-                  loading="lazy"
+          {/* Left Column: Typographic Name List */}
+          <div className="lg:col-span-7 flex flex-col items-start gap-y-4 lg:gap-y-6 lg:py-8">
+            {projects.map((proj, idx) => (
+               <div key={proj.slug} className="transition-transform duration-300 w-full">
+                  <Link
+                    href={`/projects/${proj.slug}`}
+                    onMouseEnter={() => {
+                       // Only trigger hover changes securely on desktop
+                       if (window.innerWidth >= 1024) {
+                         setActiveSlug(proj.slug);
+                       }
+                    }}
+                    onClick={() => setActiveSlug(proj.slug)}
+                    className={`font-serif text-[clamp(2.5rem,4.5vw,5rem)] leading-none tracking-tighter transition-all duration-300 inline-block align-middle pb-2 ${
+                      activeSlug === proj.slug 
+                        ? 'text-[var(--foreground)] opacity-100 scale-[1.02] origin-left drop-shadow-lg' 
+                        : 'text-[var(--muted)] opacity-30 hover:opacity-70'
+                    }`}
+                  >
+                     {proj.title}
+                  </Link>
+                  {idx < projects.length - 1 && (
+                     <span className="font-serif text-[clamp(2.5rem,4.5vw,5rem)] leading-none opacity-20 ml-4 lg:ml-8 select-none font-light inline-block align-middle pb-2">
+                        /
+                     </span>
+                  )}
+               </div>
+            ))}
+          </div>
+
+          {/* Right Column: Active Image Viewport (Sticky) */}
+          <div className="lg:col-span-5 h-[55vh] lg:h-[70vh] w-full lg:sticky lg:top-32 flex flex-col justify-between border border-[rgba(255,255,255,0.05)] p-4 md:p-6 bg-[#0a0a0a] shadow-2xl">
+             
+             <Link href={`/projects/${activeProject.slug}`} className="relative w-full h-[85%] overflow-hidden group block cursor-pointer bg-[#000]">
+                <Image 
+                  src={activeProject.gallery[currentIndex]} 
+                  alt={activeProject.title} 
+                  fill 
+                  className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105 opacity-90 group-hover:opacity-100"
                 />
-              </Link>
-            </div>
-          );
-        })}
+                
+                {/* Overlay Badge */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-black/20 backdrop-blur-[2px]">
+                   <span className="bg-[#0d0d0d] text-white text-[10px] tracking-[0.2em] uppercase px-5 py-2.5 rounded-full shadow-xl border border-white/10">
+                      View Project
+                   </span>
+                </div>
+             </Link>
+
+             {/* Controls */}
+             <div className="flex items-center justify-between mt-6 px-2 lg:px-4">
+                <button 
+                  onClick={prevImg}
+                  className="p-4 -m-4 text-2xl opacity-40 hover:opacity-100 transition-opacity"
+                >
+                  &lsaquo;
+                </button>
+
+                <div className="flex flex-col items-center">
+                   <div className="text-[10px] tracking-[0.2em] uppercase font-condensed mb-1 opacity-80 text-[var(--foreground)]">
+                     {activeProject.title}
+                   </div>
+                   <div className="text-[9px] tracking-[0.3em] uppercase text-[var(--muted)] opacity-50">
+                     {currentIndex + 1} / {activeProject.gallery.length}
+                   </div>
+                </div>
+
+                <button 
+                  onClick={nextImg}
+                  className="p-4 -m-4 text-2xl opacity-40 hover:opacity-100 transition-opacity"
+                >
+                  &rsaquo;
+                </button>
+             </div>
+
+          </div>
+
+        </div>
       </div>
     </section>
   );

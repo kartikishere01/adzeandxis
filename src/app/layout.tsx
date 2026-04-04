@@ -28,9 +28,8 @@ const fontBarlowCondensed = Barlow_Condensed({
 });
 
 export const metadata: Metadata = {
-  title: "Brand Architecture",
-  description:
-    "A minimal and warm architectural experience with smooth scrolling and GSAP animations.",
+  title: "Adze & Axis | Architecture & Interior Studio",
+  description: "Adze & Axis is a full-service architecture, interior design, and construction studio — designing and building spaces that work as beautifully as they look.",
 };
 
 export default function RootLayout({

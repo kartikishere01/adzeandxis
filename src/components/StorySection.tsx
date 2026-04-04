@@ -39,7 +39,7 @@ export default function StorySection() {
     <section ref={containerRef} id="story" className="story section">
       {/* Background image */}
       <div className="bg-layer" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
-        <div className="story__image" style={{ filter: "grayscale(100%)" }}>
+        <div className="story__image">
           <img
             src="/blog-1.png"
             alt="Minimalist architectural light and shadow"
@@ -51,13 +51,13 @@ export default function StorySection() {
 
       <div className="content-layer flex flex-col items-center justify-center" style={{ position: 'relative', width: '100%', height: '100%', zIndex: 2 }}>
         {/* Dark overlay */}
-        <div className="story__overlay" />
+        <div className="story__overlay absolute inset-0 bg-black/75 pointer-events-none" />
 
         {/* Text */}
         <div className="story__content flex flex-col items-center justify-center gap-6 md:gap-10 max-w-4xl mx-auto px-[5%] md:px-[8%] text-center" style={{ position: 'relative', zIndex: 3 }}>
           
           <div className="reveal-text">
-            <span className="font-sans text-[10px] md:text-xs tracking-[0.4em] uppercase opacity-70 text-[var(--foreground)]">
+            <span className="font-sans text-[10px] md:text-xs tracking-[0.4em] uppercase opacity-100 text-[var(--foreground)] drop-shadow-md font-semibold">
               OUR MOTTO
             </span>
           </div>
@@ -71,7 +71,7 @@ export default function StorySection() {
           </div>
 
           <div className="reveal-text">
-            <p className="font-sans text-xs md:text-sm leading-[1.8] max-w-2xl opacity-75 text-[var(--muted)]">
+            <p className="font-sans text-sm md:text-base leading-[1.8] max-w-2xl opacity-90 text-[var(--foreground)] drop-shadow-md">
               This is not a boast. It is a methodology. Thinking deeply before acting is what<br className="hidden md:block"/>
               separates architecture from construction, and construction from craft. At<br className="hidden md:block"/>
               Adze &amp; Axis, the thinking never stops — it only becomes more physical.
