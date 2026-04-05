@@ -52,6 +52,11 @@ export default function Footer() {
         <a href="https://www.linkedin.com/in/adze-and-axis-studio-3083773bb?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--accent)] transition-colors py-2">LINKEDIN</a>
       </div>
 
+      {/* Copyright */}
+      <div className="font-condensed uppercase tracking-[0.3em] text-[9px] md:text-[10px] opacity-30 text-center w-full px-4">
+        &copy; {new Date().getFullYear()} Adze &amp; Axis Studio. All Rights Reserved.
+      </div>
+
     </footer>
   );
 }

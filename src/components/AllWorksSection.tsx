@@ -54,8 +54,8 @@ export default function AllWorksSection() {
     >
       <div className="max-w-[1600px] mx-auto">
         
-        <h2 className="font-condensed uppercase tracking-[0.3em] text-[10px] md:text-xs text-[var(--foreground)] opacity-50 mb-16 border-b border-[rgba(255,255,255,0.05)] pb-6 relative z-20">
-          All Works &mdash; Index
+        <h2 className="font-serif text-[clamp(2.5rem,4.5vw,5rem)] tracking-tighter font-light text-[var(--foreground)] opacity-90 mb-16 md:mb-24 text-center w-full relative z-20">
+          All Works
         </h2>
 
         <div className="flex flex-col-reverse lg:grid lg:grid-cols-12 gap-16 lg:gap-24 relative z-20 items-start">
